@@ -1,50 +1,45 @@
 <template>
   <div id="app">
-    <form>
-      <label for="username">Username</label>
-      <input type="text" v-model.trim="loginData.username" name="username" id="username">
-      <label for="password">Password</label>
-      <input type="password" v-model.trim="loginData.password" id="password" name="password">
-      <input type="button" value="Log in" @click="doLogin">
-    </form>
+    <router-view/>
+    <p id="app-copyright">Yummy! | @XYF | Copyright ©2019 All Rights Reserved</p>
   </div>
 </template>
 
 <script>
-import utils from "./utils/utils"
-export default {
-  name: 'login',
-  data () {
-    return {
-      loginData:{
-        username:"",
-        password:""
-      }
-    }
-  },
-  methods:{
-    doLogin(){
-      let success=(response)=>{
-        alert(response.data.msg);
-      };
-      utils.axiosMethod({
-        method: "POST",
-        url:"/yummy/login/",
-        data:this.loginData,
-        callback:success
-      })
-    }
-  }
-}
+
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    height: 100%;
+    background-color: white;
+  }
+  #app::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+  }
+  #app::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #535353;
+  }
+  #app::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    background: #EDEDED;
+  }
+  #app-copyright {
+    color: dimgrey;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    left: 20%;right: 20%;
+    bottom: 2.5%;
+  }
 </style>

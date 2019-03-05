@@ -1,4 +1,4 @@
-import axios from '_axios@0.18.0@axios';
+import axios from 'axios';
 
 const utils={
   axiosMethod:(config)=>{
