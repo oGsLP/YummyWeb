@@ -9,6 +9,15 @@ import Member from "../components/Member/Member";
 import Merchant from "../components/Merchant/Merchant";
 import Admin from "../components/Admin/Admin";
 import Yummy from "../components/Yummy";
+import MemberMain from "../components/Member/MemberMain";
+import MemberShop from "../components/Member/MemberShop";
+import MemberDeal from "../components/Member/MemberDeal";
+import MemberStat from "../components/Member/MemberStat";
+import MemberInfo from "../components/Member/MemberInfo";
+import MerchantMenu from "../components/Merchant/MerchantMenu";
+import MerchantInfo from "../components/Merchant/MerchantInfo";
+import MerchantDeal from "../components/Merchant/MerchantDeal";
+import MerchantStat from "../components/Merchant/MerchantStat";
 
 
 Vue.use(Router);
@@ -51,34 +60,86 @@ export default new Router({
       ]
     },
     {
-      path: '/member',
-      name: 'member',
+      path: '/member/:mem_name',
       component: Member,
-      // children: [
-      //   {
-      //   }
-      // ]
+      children: [
+        {
+          path: 'main',
+          name: 'memberMain',
+          components: {
+            main: MemberMain
+          }
+        },
+        {
+          path: 'shop/:mer_id',
+          name: 'memberShop',
+          components: {
+            main: MemberShop
+          }
+        },
+        {
+          path: 'info',
+          name: 'memberInfo',
+          components: {
+            main: MemberInfo
+          }
+        },
+        {
+          path: 'deal',
+          name: 'memberDeal',
+          components: {
+            main: MemberDeal
+          }
+        },
+        {
+          path: 'stat',
+          name: 'memberStat',
+          components: {
+            main: MemberStat
+          }
+        }
+      ]
     },
-    // {
-    //   path: '/merchant',
-    //   name: 'merchant',
-    //   component: Merchant,
-    //   children: [
-    //     {
-    //
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: '/admin',
-    //   name: 'admin',
-    //   component: Admin,
-    //   children: [
-    //     {
-    //
-    //     }
-    //   ]
-    // }
+    {
+      path: '/merchant/:cdkey',
+      component: Merchant,
+      children: [
+        {
+          path: 'menu',
+          name: 'merchantMenu',
+          components: {
+            main: MerchantMenu
+          }
+        },
+        {
+          path: 'info',
+          name: 'merchantInfo',
+          components: {
+            main: MerchantInfo
+          },
+
+        },
+        {
+          path: 'deal',
+          name: 'merchantDeal',
+          components: {
+            main: MerchantDeal
+          }
+        },
+        {
+          path: 'stat',
+          name: 'merchantStat',
+          components: {
+            main: MerchantStat
+          }
+        }
+      ]
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
+    }
 
   ]
 })

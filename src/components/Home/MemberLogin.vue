@@ -1,5 +1,5 @@
 <template>
-  <div id="memberLogin">
+  <div id="member-login">
     <b-form id="member-login-form">
       <h2>Member {{log_type.charAt(0).toUpperCase()+log_type.slice(1).toLowerCase()}}</h2>
       <b-form class="member-group"
@@ -23,7 +23,7 @@
         <b-form-input id="member-vertification" name="vertification" type="password"
                  variant="outline-primary"
                  v-model.trim="logData.vertification"></b-form-input>
-        <b-button id="member-email-button" variant="outline-info" @click="sendCode">Send</b-button>
+        <b-button :disabled="countData.dismissCountDown!==0" id="member-email-button" variant="outline-info" @click="sendCode">Send</b-button>
         <b-alert id="member-email-alert"
           :show="countData.dismissCountDown"
           dismissible
@@ -63,7 +63,6 @@
         countData:{
           dismissSecs: 60,
           dismissCountDown: 0,
-          showDismissibleAlert: false
         },
         codeVertification:"198756"
       }
@@ -89,10 +88,11 @@
       sendCode(){
         utils.axiosMethod({
           method: 'POST',
-          url:'/yummy/member/sendCode',
+          url:'/yummy/login/member/sendCode',
           data:{email: this.email},
           callback:(response)=>{
-            alert(response.data.msg);
+            alert(response.data.msg+' '+response.data.object);
+            this.codeVertification=response.data.object;
             setTimeout(function () {
               this.countData.dismissCountDown = this.countData.dismissSecs;
             }.bind(this),10);
@@ -103,11 +103,12 @@
       member_login(){
         utils.axiosMethod({
           method: 'POST',
-          url:'/yummy/member/login',
+          url:'/yummy/login/member/login',
           data:this.getLogData(),
           callback:(response)=>{
             alert(response.data.msg);
-            this.$router.push({name:'member'});
+            // global session
+            this.$router.push({name:'memberMain',params:{mem_name: response.data.object.toString()}});
           }
         });
       },
@@ -115,7 +116,7 @@
         if(this.logData.vertification===this.codeVertification){
           utils.axiosMethod({
             method: 'Post',
-            url:"/yummy/member/register",
+            url:"/yummy/login/member/register",
             data:this.getLogData(),
             callback:(response)=>{
               alert(response.data.msg);
