@@ -134,6 +134,9 @@
         }
       },
       computed:{
+        member_id(){
+          return sessionStorage.getItem('memberId');
+        },
         infoValidation(){
           if(this.infoEditable){
 
@@ -160,7 +163,7 @@
         get_info(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/info/info`, //to modify
+            url: `/yummy/member/${this.member_id}/info/info`, //to modify
             callback: (response)=>{
               if(response.data.code===1){
                 this.memberInfo.phone=response.data.object.phone;
@@ -173,7 +176,7 @@
         get_addresses(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/info/addresses`, //to modify
+            url: `/yummy/member/${this.member_id}/info/addresses`, //to modify
             callback: (response)=>{
               if(response.data.code===1){
                 this.memberAddresses=response.data.list;
@@ -186,7 +189,7 @@
         get_payment(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/payment`, //to modify
+            url: `/yummy/member/${this.member_id}/payment`, //to modify
             callback: (response)=>{
               if(response.data.code===1){
                 this.hasPayment=true;
@@ -206,7 +209,7 @@
           if(this.infoEditable)
             utils.axiosMethod({
               method: 'PUT',
-              url: `/yummy/member/1/info/info`, //to modify
+              url: `/yummy/member/${this.member_id}/info/info`, //to modify
               data: this.memberInfo,
               callback: (response)=>{
                 alert(response.data.msg);
@@ -217,7 +220,7 @@
           if(this.addressValidation)
             utils.axiosMethod({
               method: 'POST',
-              url: `/yummy/member/1/info/address`,
+              url: `/yummy/member/${this.member_id}/info/address`,
               data: this.addAddress,
               callback: (response)=>{
                 alert(response.data.msg);
@@ -234,7 +237,7 @@
         delete_address(i){
           utils.axiosMethod({
             method: 'DELETE',
-            url: `/yummy/member/1/info/addresses/${i}`,
+            url: `/yummy/member/${this.member_id}/info/addresses/${i}`,
             callback: (response)=>{
               alert(response.data.msg);
               if(response.data.code===1){
@@ -247,7 +250,7 @@
           if(this.paymentValidation)
             utils.axiosMethod({
               method: 'POST',
-              url: `/yummy/member/1/payment`,
+              url: `/yummy/member/${this.member_id}/payment`,
               data: {
                 account: this.memberPayment.account,
                 password: this.memberPayment.password

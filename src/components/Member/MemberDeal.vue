@@ -139,7 +139,6 @@
           },
           currentPayDeal: {},
           currentRefundDeal: {}
-
         }
       },
       created(){
@@ -147,13 +146,15 @@
           this.get_deals(i);
       },
       computed:{
-
+        member_id(){
+          return sessionStorage.getItem('memberId');
+        }
       },
       methods:{
         get_deals(i){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/deals`,
+            url: `/yummy/member/${this.member_id}/deals`,
             params: {type : this.dealType[i].enum},
             callback: (response)=>{
               if(response.data.code===1){
@@ -176,7 +177,7 @@
           new Promise(resolve => {
             utils.axiosMethod({
               method: 'PUT',
-              url:  `/yummy/member/1/payment/deals`,
+              url:  `/yummy/member/${this.member_id}/payment/deals`,
               params: {
                 deal_id: this.currentPayDeal.id,
                 type: 'pay'
@@ -192,7 +193,7 @@
           }).then(id=> {
             utils.axiosMethod({
               method: 'PUT',
-              url: `/yummy/member/1/deals/${id}`,
+              url: `/yummy/member/${this.member_id}/deals/${id}`,
               params: {put_type: this.dealType[3].enum},
               callback: (response)=> {
                 alert(response.data.msg);
@@ -208,7 +209,7 @@
         cancel_deal(i){
           utils.axiosMethod({
             method: 'PUT',
-            url: `/yummy/member/1/deals/${this.deals.obligation[i].id}`,
+            url: `/yummy/member/${this.member_id}/deals/${this.deals.obligation[i].id}`,
             params: {put_type: this.dealType[2].enum},
             callback: (response)=>{
               alert(response.data.msg);
@@ -223,7 +224,7 @@
           new Promise(resolve => {
             utils.axiosMethod({
               method: 'PUT',
-              url:  `/yummy/member/1/payment/deals`,
+              url:  `/yummy/member/${this.member_id}/payment/deals`,
               params: {
                 deal_id: this.currentRefundDeal.id,
                 type: 'refund'
@@ -239,7 +240,7 @@
           }).then(id=>{
             utils.axiosMethod({
               method: 'PUT',
-              url: `/yummy/member/1/deals/${id}`,
+              url: `/yummy/member/${this.member_id}/deals/${id}`,
               params: {put_type: this.dealType[4].enum},
               callback: (response)=>{
                 alert(response.data.msg);
@@ -256,7 +257,7 @@
         complete_deal(i){
           utils.axiosMethod({
             method: 'PUT',
-            url: `/yummy/member/1/deals/${this.deals.paid[i].id}`,
+            url: `/yummy/member/${this.member_id}/deals/${this.deals.paid[i].id}`,
             params: {put_type: this.dealType[5].enum},
             callback: (response)=>{
               alert(response.data.msg);

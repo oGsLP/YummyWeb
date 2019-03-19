@@ -51,8 +51,12 @@
               data: this.verifyData,
               callback: (response)=>{
                 alert(response.data.msg);
-                if(response.data.code===1)
+                if(response.data.code===1){
+                  this.$store.dispatch('setUser','admin');
+                  this.$store.dispatch('setToken','admin');
                   this.$router.push({name: 'admin'})
+                }
+
               }
             });
           }

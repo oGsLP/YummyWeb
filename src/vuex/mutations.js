@@ -1,4 +1,45 @@
-const mutations = {
+export const changeUserStatus = (state,user)=>{
+  if(user){
+    state.currentUser=user;
+    state.isLogin=true;
+    if(typeof user === 'string'){
+      state.userType='Admin';
+      sessionStorage.setItem('userType','Admin');
+      sessionStorage.setItem('admin','admin');
+    }
+    else if(user.cdkey!==undefined){
+      state.userType='Merchant';
+      sessionStorage.setItem('userType','Merchant');
+      sessionStorage.setItem('merchantId',user.id);
+      sessionStorage.setItem('cdkey',user.cdkey);
+    }
+    else {
+      state.userType='Member';
+      sessionStorage.setItem('userType','Member');
+      sessionStorage.setItem('memberId',user.id);
+      sessionStorage.setItem('level',user.level);
+    }
+  }
+  else{
+    if(user===null){
+      sessionStorage.setItem('memberId',null);
+      sessionStorage.setItem('level',null);
+      sessionStorage.setItem('merchantId',null);
+      sessionStorage.setItem('cdkey',null);
+      sessionStorage.setItem('admin', null);
+      sessionStorage.setItem('userToken', '');
+      sessionStorage.setItem('userType',null);
 
+      state.currentUser=null;
+      state.isLogin=false;
+      state.userType=null;
+    }
+  }
 };
-export default mutations;
+export const changeUserToken = (state,userToken) => {
+  if (userToken) {
+    state.token = userToken;
+  } else {
+    state.token = null;
+  }
+};

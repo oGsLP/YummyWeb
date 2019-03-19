@@ -28,13 +28,15 @@
 
       },
       computed:{
-
+        merchant_id(){
+          return sessionStorage.getItem('merchantId');
+        }
       },
       methods:{
         get_stat(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/merchant/1/stat`,
+            url: `/yummy/merchant/${this.merchant_id}/stat`,
             callback: response=>{
               if(response.data.code===0)
                 alert(response.data.msg);

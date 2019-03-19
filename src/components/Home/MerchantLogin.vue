@@ -112,8 +112,12 @@
           data: this.logData,
           callback: (response)=>{
             alert(response.data.msg);
-            if(response.data.code===1)
+            if(response.data.code===1){
+              this.$store.dispatch('setUser',response.data.object);
+              this.$store.dispatch('setToken',response.data.object.id);
               this.$router.push({name: 'merchantInfo',params:{cdkey:this.logData.cdkey}});
+            }
+
           }
         })
       },

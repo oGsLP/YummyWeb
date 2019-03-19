@@ -1,4 +1,6 @@
-const actions = {
-
+export const setUser=({commit},user)=>{
+  commit('changeUserStatus',user);
 };
-export default actions;
+export const setToken = ({commit},userToken) => {
+  commit("changeUserToken",userToken)
+};

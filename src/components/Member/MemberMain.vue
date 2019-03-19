@@ -60,12 +60,15 @@
         '$route': 'get_merchants'
       },
       computed:{
+        member_id(){
+          return sessionStorage.getItem('memberId');
+        }
       },
       methods:{
         get_merchants() {
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/merchants`,
+            url: `/yummy/member/${this.member_id}/merchants`,
             callback: (response)=>{
               if(response.data.code===1)
                 this.merchants=response.data.list;

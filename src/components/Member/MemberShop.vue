@@ -183,6 +183,9 @@
         this.get_merchant_discount();
       },
       computed:{
+        member_id(){
+          return sessionStorage.getItem('memberId');
+        },
         url_params(){
           return this.$route.params;
         },
@@ -211,7 +214,7 @@
         get_current_dishes(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/merchants/${this.url_params['mer_id']}/dishes`,
+            url: `/yummy/member/${this.member_id}/merchants/${this.url_params['mer_id']}/dishes`,
             callback: (response)=>{
               if(response.data.code===1){
                 this.shopMenu.dishes=response.data.list;
@@ -223,7 +226,7 @@
         get_current_packs(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/merchants/${this.url_params['mer_id']}/packs`,
+            url: `/yummy/member/${this.member_id}/merchants/${this.url_params['mer_id']}/packs`,
             callback: (response)=>{
               if(response.data.code===1){
                 this.shopMenu.packs=response.data.list;
@@ -235,7 +238,7 @@
         get_addresses(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/info/addresses`, //to modify
+            url: `/yummy/member/${this.member_id}/info/addresses`, //to modify
             callback: (response)=>{
               if(response.data.code===1){
                 this.addresses=response.data.list;
@@ -248,7 +251,7 @@
         get_merchant_discount(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/merchants/${this.url_params['mer_id']}/discounts`,
+            url: `/yummy/member/${this.member_id}/merchants/${this.url_params['mer_id']}/discounts`,
             callback: (response)=>{
               this.merchantDiscount = response.data.object;
             }
@@ -357,7 +360,7 @@
         submit_deal(){
           utils.axiosMethod({
             method: 'POST',
-            url: `/yummy/member/1/deals`,
+            url: `/yummy/member/${this.member_id}/deals`,
             params: {mer_id: '1'},
             data: this.get_deal_object(),
             callback: (response)=>{
@@ -371,7 +374,7 @@
           new Promise(resolve => {
             utils.axiosMethod({
               method: 'POST',
-              url: `/yummy/member/1/deals`,
+              url: `/yummy/member/${this.member_id}/deals`,
               params: {mer_id: '1'},
               data: this.get_deal_object(),
               callback: (response)=>{
@@ -384,7 +387,7 @@
             if(deal_id!==null){
               utils.axiosMethod({
                 method: 'PUT',
-                url:  `/yummy/member/1/payment/deals`,
+                url:  `/yummy/member/${this.member_id}/payment/deals`,
                 params: {
                   deal_id: deal_id,
                   type: 'pay'
@@ -404,7 +407,7 @@
           })).then(deal_id=>{
             utils.axiosMethod({
               method: 'PUT',
-              url: `/yummy/member/1/deals/${deal_id}`,
+              url: `/yummy/member/${this.member_id}/deals/${deal_id}`,
               params:{put_type : 'ACCOUNT_PAID'},
               callback: response=>{
                 alert(response.data.msg);

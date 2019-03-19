@@ -107,8 +107,11 @@
           data:this.getLogData(),
           callback:(response)=>{
             alert(response.data.msg);
-            // global session
-            this.$router.push({name:'memberMain',params:{mem_name: response.data.object.toString()}});
+            if(response.data.code===1){
+              this.$store.dispatch('setUser',response.data.object);
+              this.$store.dispatch('setToken',response.data.object.id);
+              this.$router.push({name:'memberMain',params:{mem_name: response.data.object.name.toString()}});
+            }
           }
         });
       },

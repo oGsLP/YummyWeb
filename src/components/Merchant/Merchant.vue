@@ -51,7 +51,8 @@
       },
       methods:{
         signOut:()=>{
-          alert("not defined yet");
+          this.$store.dispatch('setUser',null);
+          this.$store.dispatch('setToken',null);
           this.$router.push({name: 'home'});
         }
       }

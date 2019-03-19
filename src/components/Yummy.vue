@@ -54,7 +54,12 @@
 
 <script>
     export default {
-        name: "Yummy"
+      name: "Yummy",
+      beforeRouteEnter:(to,from,next) => {
+        next(vm => {
+          vm.$store.dispatch("setUser",null);
+        });
+      },
     }
 </script>
 

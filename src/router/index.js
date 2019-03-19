@@ -18,11 +18,16 @@ import MerchantMenu from "../components/Merchant/MerchantMenu";
 import MerchantInfo from "../components/Merchant/MerchantInfo";
 import MerchantDeal from "../components/Merchant/MerchantDeal";
 import MerchantStat from "../components/Merchant/MerchantStat";
+import AdminSetting from "../components/Admin/AdminSetting";
+import AdminStat from "../components/Admin/AdminStat";
+import AdminApply from "../components/Admin/AdminApply";
+import store from "../vuex/store";
+import NoAccess from "../components/NoAccess";
 
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'hash',
   routes: [
     {
@@ -68,35 +73,55 @@ export default new Router({
           name: 'memberMain',
           components: {
             main: MemberMain
-          }
+          },
+          meta:{
+            isLogin: true,
+            type: 'Member'
+          },
         },
         {
           path: 'shop/:mer_id',
           name: 'memberShop',
           components: {
             main: MemberShop
-          }
+          },
+          meta:{
+            isLogin: true,
+            type: 'Member'
+          },
         },
         {
           path: 'info',
           name: 'memberInfo',
           components: {
             main: MemberInfo
-          }
+          },
+          meta:{
+            isLogin: true,
+            type: 'Member'
+          },
         },
         {
           path: 'deal',
           name: 'memberDeal',
           components: {
             main: MemberDeal
-          }
+          },
+          meta:{
+            isLogin: true,
+            type: 'Member'
+          },
         },
         {
           path: 'stat',
           name: 'memberStat',
           components: {
             main: MemberStat
-          }
+          },
+          meta:{
+            isLogin: true,
+            type: 'Member'
+          },
         }
       ]
     },
@@ -109,6 +134,10 @@ export default new Router({
           name: 'merchantMenu',
           components: {
             main: MerchantMenu
+          },
+          meta:{
+            isLogin: true,
+            type: 'Merchant'
           }
         },
         {
@@ -117,6 +146,10 @@ export default new Router({
           components: {
             main: MerchantInfo
           },
+          meta:{
+            isLogin: true,
+            type: 'Merchant'
+          }
 
         },
         {
@@ -124,6 +157,10 @@ export default new Router({
           name: 'merchantDeal',
           components: {
             main: MerchantDeal
+          },
+          meta:{
+            isLogin: true,
+            type: 'Merchant'
           }
         },
         {
@@ -131,6 +168,10 @@ export default new Router({
           name: 'merchantStat',
           components: {
             main: MerchantStat
+          },
+          meta:{
+            isLogin: true,
+            type: 'Merchant'
           }
         }
       ]
@@ -138,8 +179,60 @@ export default new Router({
     {
       path: '/admin',
       name: 'admin',
+      redirect: {name: 'adminApply'},
       component: Admin,
+      children:[
+        {
+          path: 'setting',
+          name: 'adminSetting',
+          components:{
+            main: AdminSetting
+          },
+          meta:{
+            isLogin: true,
+            type: 'Admin'
+          }
+        },
+        {
+          path: 'stat',
+          name: 'adminStat',
+          components:{
+            main: AdminStat
+          },
+          meta:{
+            isLogin: true,
+            type: 'Admin'
+          }
+        },
+        {
+          path: 'apply',
+          name: 'adminApply',
+          components:{
+            main: AdminApply
+          },
+          meta:{
+            isLogin: true,
+            type: 'Admin'
+          }
+        }
+      ]
+    },
+    {
+      path: '/NoAccess',
+      name: 'noAccess',
+      component: NoAccess
     }
-
   ]
-})
+});
+
+router.beforeEach((to,from,next)=>{
+  if(to.meta.isLogin){
+    let type = sessionStorage.getItem('userType');
+    if(to.meta.type===type)
+      next();
+    else next({name: 'noAccess'});
+  }
+  else next();
+});
+
+export default router;

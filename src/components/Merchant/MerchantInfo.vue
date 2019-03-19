@@ -74,6 +74,9 @@
         this.get_info();
       },
       computed:{
+        merchant_id(){
+          return sessionStorage.getItem('merchantId');
+        },
         get_state(){
           for(let type of this.vertificationType){
             if(this.merchantInfo.verEnum===type.enum)
@@ -85,7 +88,7 @@
         get_info(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/merchant/1/info`,
+            url: `/yummy/merchant/${this.merchant_id}/info`,
             callback: (response)=>{
               if(response.data.code===1){
                 this.merchantInfo=response.data.object;
@@ -97,7 +100,7 @@
         modify_info(){
           utils.axiosMethod({
             method: 'PUT',
-            url: `/yummy/merchant/1/info`,
+            url: `/yummy/merchant/${this.merchant_id}/info`,
             data: this.merchantInfo,
             callback: (response)=>{
               alert(response.data.msg);

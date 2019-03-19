@@ -2,7 +2,7 @@
   <div id="merchant-menu">
 
     <div id="merchant-right-main">
-      <h2>Menu~</h2>
+      <h2>Menu</h2>
       <div id="dishes-list">
         <h3>Dishes</h3>
         <div class="menu-item" v-for="(dish,index) of dishes" :key="'dish_'+index">
@@ -134,6 +134,9 @@
         this.get_packs();
       },
       computed:{
+        merchant_id(){
+          return sessionStorage.getItem('merchantId');
+        },
         type_options(){
           let array = [];
           this.dishType.forEach((type,index)=>{
@@ -155,7 +158,7 @@
         get_dishes(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/merchant/1/menu/dishes`,
+            url: `/yummy/merchant/${this.merchant_id}/menu/dishes`,
             callback: (response)=>{
               this.dishes=response.data.list;
             }
@@ -164,7 +167,7 @@
         get_packs(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/merchant/1/menu/packs`,
+            url: `/yummy/merchant/${this.merchant_id}/menu/packs`,
             callback: (response)=>{
               this.packs=response.data.list;
             }
@@ -175,7 +178,7 @@
             this.newDish.type=this.dishType[this.newDish.type].enum;
             utils.axiosMethod({
               method: 'POST',
-              url: `/yummy/merchant/1/menu/dishes`,
+              url: `/yummy/merchant/${this.merchant_id}/menu/dishes`,
               data: this.newDish,
               callback: (response)=>{
                 alert(response.data.msg);
@@ -194,7 +197,7 @@
         modify_dish(i){
           utils.axiosMethod({
             method: 'PUT',
-            url: `/yummy/merchant/1/menu/dishes/${this.dishes[i].id}`,
+            url: `/yummy/merchant/${this.merchant_id}/menu/dishes/${this.dishes[i].id}`,
             data: this.dishes[i],
             callback: (response)=>{
               alert(response.data.msg);
@@ -205,7 +208,7 @@
           let dish_id = this.dishes[i].id;
           utils.axiosMethod({
             method: 'DELETE',
-            url: `/yummy/merchant/1/menu/dishes/${dish_id}`,
+            url: `/yummy/merchant/${this.merchant_id}/menu/dishes/${dish_id}`,
             callback: (response)=>{
               alert(response.data.msg);
             }
@@ -215,7 +218,7 @@
           if(1===1){    ///////////to do
             utils.axiosMethod({
               method: 'POST',
-              url: `/yummy/merchant/1/menu/packs`,
+              url: `/yummy/merchant/${this.merchant_id}/menu/packs`,
               data: this.newPack,
               callback: (response)=>{
                 alert(response.data.msg);
@@ -237,7 +240,7 @@
           let pack_id = this.packs[i].id;
           utils.axiosMethod({
             method: 'DELETE',
-            url: `/yummy/merchant/1/menu/packs/${pack_id}`,
+            url: `/yummy/merchant/${this.merchant_id}/menu/packs/${pack_id}`,
             callback: (response)=>{
               alert(response.data.msg);
             }
@@ -271,7 +274,7 @@
     vertical-align: top;
     border-right: 2px solid black;
     overflow-y: hidden;
-    padding: 2% 0;
+    padding: 5px 0 2% 0;
   }
   #merchant-right-main::-webkit-scrollbar {/*滚动条整体样式*/
     width: 0;     /*高宽分别对应横竖滚动条的尺寸*/
@@ -357,7 +360,7 @@
   }
   #new-pack-form{
     margin: 5% 2px;
-    height: 50%;width: 100%;
+    height: 55%;width: 100%;
     overflow-y: scroll;
     border: 1px black solid;
     border-radius: 10px;

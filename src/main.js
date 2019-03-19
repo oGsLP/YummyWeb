@@ -4,8 +4,9 @@ import Vue from 'vue';
 import 'es6-promise/auto'
 import BootstrapVue from 'bootstrap-vue';
 import App from './App';
-import router from './router';
 import store from './vuex/store';
+import router from './router';
+
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
@@ -41,6 +42,12 @@ import BCollapse from 'bootstrap-vue/es/components/collapse/collapse';
 Vue.component('b-collapse', BCollapse);
 import BCard from 'bootstrap-vue/es/components/card/card';
 Vue.component('b-card', BCard);
+import BCardBody from 'bootstrap-vue/es/components/card/card-body';
+Vue.component('b-card-body', BCardBody);
+import BCardTitle from 'bootstrap-vue/es/components/card/card-title';
+Vue.component('b-card-title', BCardTitle);
+import BCardSubTitle from 'bootstrap-vue/es/components/card/card-sub-title';
+Vue.component('b-card-sub-title', BCardSubTitle);
 import BCardText from 'bootstrap-vue/es/components/card/card-text';
 Vue.component('b-card-text', BCardText);
 import BBadge from 'bootstrap-vue/es/components/badge/badge';
@@ -55,6 +62,8 @@ import BModal from 'bootstrap-vue/es/components/modal/modal';
 Vue.component('b-modal', BModal);
 import BFormSelect from 'bootstrap-vue/es/components/form-select/form-select';
 Vue.component('b-form-select', BFormSelect);
+import BTable from 'bootstrap-vue/es/components/table/table';
+Vue.component('b-table', BTable);
 
 
 

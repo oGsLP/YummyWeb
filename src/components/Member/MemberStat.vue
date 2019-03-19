@@ -35,13 +35,15 @@
 
       },
       computed:{
-
+        member_id(){
+          return sessionStorage.getItem('memberId');
+        }
       },
       methods:{
         get_stat(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/1/stat`,
+            url: `/yummy/member/${this.member_id}/stat`,
             callback: response=>{
               if(response.data.code===0)
                 alert(response.data.msg);
