@@ -144,6 +144,7 @@
       created(){
         for(let i of this.typeCounter)
           this.get_deals(i);
+        this.get_member_payment();
       },
       computed:{
         member_id(){
@@ -170,6 +171,29 @@
                   this.deals.complete=response.data.list;
               }
               else alert(response.data.msg);
+            }
+          });
+        },
+        get_member_payment(){
+          utils.axiosMethod({
+            method: 'GET',
+            url: `/yummy/member/${this.member_id}/payment`,
+            callback: (response)=>{
+              if(response.data.code===1){
+                this.payment.account=response.data.object.account;
+              }
+              else alert(response.data.msg);
+            }
+          });
+        },
+        get_member_level(){
+          utils.axiosMethod({
+            method: 'GET',
+            url: `/yummy/member/${this.member_id}/payment/level`,
+            callback: (response)=>{
+              if(response.data.code===1){
+                sessionStorage.setItem('level',response.data.object);
+              }
             }
           });
         },
@@ -201,6 +225,7 @@
                   this.get_deals(1);
                   this.get_deals(3);
                   this.$refs.payModal.hide();
+                  this.get_member_level();
                 }
               }
             });
@@ -248,6 +273,7 @@
                   this.get_deals(3);
                   this.get_deals(4);
                   this.$refs.refundModal.hide();
+                  this.get_member_level();
                 }
               }
             });

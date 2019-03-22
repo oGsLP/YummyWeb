@@ -69,7 +69,6 @@ Vue.component('b-table', BTable);
 
 
 
-
 // import $ from 'jquery';
 
 

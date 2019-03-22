@@ -137,7 +137,8 @@ const router = new Router({
           },
           meta:{
             isLogin: true,
-            type: 'Merchant'
+            type: 'Merchant',
+            isVerified: true
           }
         },
         {
@@ -148,7 +149,8 @@ const router = new Router({
           },
           meta:{
             isLogin: true,
-            type: 'Merchant'
+            type: 'Merchant',
+            isVerified: false
           }
 
         },
@@ -160,7 +162,8 @@ const router = new Router({
           },
           meta:{
             isLogin: true,
-            type: 'Merchant'
+            type: 'Merchant',
+            isVerified: true
           }
         },
         {
@@ -171,7 +174,8 @@ const router = new Router({
           },
           meta:{
             isLogin: true,
-            type: 'Merchant'
+            type: 'Merchant',
+            isVerified: true
           }
         }
       ]
@@ -228,8 +232,19 @@ const router = new Router({
 router.beforeEach((to,from,next)=>{
   if(to.meta.isLogin){
     let type = sessionStorage.getItem('userType');
-    if(to.meta.type===type)
-      next();
+    if(to.meta.type===type){
+      if(to.meta.isVerified){
+        let vertification = sessionStorage.getItem('vertification');
+        if(vertification==='AFTER_VERTIFICATION'){
+          next();
+        }
+        else {
+          alert('Not Verified yet! You cannot try that part');
+          next(false);
+        }
+      }
+      else next();
+    }
     else next({name: 'noAccess'});
   }
   else next();

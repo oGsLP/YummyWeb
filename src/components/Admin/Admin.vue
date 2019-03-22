@@ -52,6 +52,7 @@
       },
       methods:{
         signOut(){
+          alert('Sign out !');
           this.$store.dispatch('setUser',null);
           this.$store.dispatch('setToken',null);
           this.$router.push({name: 'adminLogin'});

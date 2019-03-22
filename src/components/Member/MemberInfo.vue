@@ -11,7 +11,7 @@
           <b-form id="member-info-form">
             <b-form-group>
               <label for="info-name">email: </label>
-              <b-form-input id="info-email" v-model.trim="memberInfo.name" disabled="disabled"></b-form-input>
+              <b-form-input id="info-email" v-model.trim="member_email" disabled="disabled"></b-form-input>
             </b-form-group>
             <b-form-group>
               <label for="info-name">name: </label>
@@ -137,6 +137,9 @@
         member_id(){
           return sessionStorage.getItem('memberId');
         },
+        member_email(){
+          return sessionStorage.getItem('memberEmail');
+        },
         infoValidation(){
           if(this.infoEditable){
 
@@ -189,7 +192,7 @@
         get_payment(){
           utils.axiosMethod({
             method: 'GET',
-            url: `/yummy/member/${this.member_id}/payment`, //to modify
+            url: `/yummy/member/${this.member_id}/payment`,
             callback: (response)=>{
               if(response.data.code===1){
                 this.hasPayment=true;

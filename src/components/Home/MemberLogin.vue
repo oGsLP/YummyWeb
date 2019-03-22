@@ -108,6 +108,7 @@
           callback:(response)=>{
             alert(response.data.msg);
             if(response.data.code===1){
+              sessionStorage.setItem('memberEmail',this.getLogData().email);
               this.$store.dispatch('setUser',response.data.object);
               this.$store.dispatch('setToken',response.data.object.id);
               this.$router.push({name:'memberMain',params:{mem_name: response.data.object.name.toString()}});

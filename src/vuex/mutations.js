@@ -22,13 +22,7 @@ export const changeUserStatus = (state,user)=>{
   }
   else{
     if(user===null){
-      sessionStorage.setItem('memberId',null);
-      sessionStorage.setItem('level',null);
-      sessionStorage.setItem('merchantId',null);
-      sessionStorage.setItem('cdkey',null);
-      sessionStorage.setItem('admin', null);
-      sessionStorage.setItem('userToken', '');
-      sessionStorage.setItem('userType',null);
+      sessionStorage.clear();
 
       state.currentUser=null;
       state.isLogin=false;

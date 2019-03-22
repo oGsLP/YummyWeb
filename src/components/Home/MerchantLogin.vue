@@ -113,6 +113,7 @@
           callback: (response)=>{
             alert(response.data.msg);
             if(response.data.code===1){
+              sessionStorage.setItem('vertification',response.data.object.vertification);
               this.$store.dispatch('setUser',response.data.object);
               this.$store.dispatch('setToken',response.data.object.id);
               this.$router.push({name: 'merchantInfo',params:{cdkey:this.logData.cdkey}});

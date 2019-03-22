@@ -15,7 +15,7 @@
           </b-form-group>
           <b-form-group>
             <label for="merchant-info-type">Type: </label>
-            <b-form-input id="merchant-info-type" v-model.trim="merchantInfo.type" :disabled="!editable"></b-form-input>
+            <b-form-select id="merchant-info-type" v-model="select_type" :options="type_options" :disabled="!editable"></b-form-select>
           </b-form-group>
           <b-form-group>
             <label for="merchant-address-x">X: </label>
@@ -56,6 +56,15 @@
             {enum: 'GET_DISAPPROVAL', name: 'Disapproval', msg: 'Your info submitted, but gotta rejected. Please modify and submit again.'},
             {enum: 'AFTER_VERTIFICATION', name: 'verified', msg: 'You gotta approved! Manage your menu and make deals!'}
           ],
+          merchantType:[
+            {enum: "", name:""},
+            {enum: 'FAST_FOOD', name: 'FastFood'},            //  1
+            {enum: 'HOME_COOKING', name: 'HomeStyle'},        //  2
+            {enum: 'PASTRY_SHOP', name: 'Snacks'},            //  3
+            {enum: 'CONVENIENCE_SHOP', name: 'Convenience'},  //  4
+            {enum: 'GARDEN_STUFF', name: 'GardenStuff'},      //  5
+            {enum: 'OTHER' , name: 'Other'}                   //  6
+          ],
           merchantInfo: {
             name: '',
             type: '',
@@ -67,7 +76,8 @@
               note: ''
             }
           },
-          editable: false
+          editable: false,
+          select_type: null,
         }
       },
       created(){
@@ -82,7 +92,17 @@
             if(this.merchantInfo.verEnum===type.enum)
               return type;
           }
-        }
+        },
+        type_options(){
+          let array = [];
+          this.merchantType.forEach((type,index)=>{
+            if(index!==0){
+              array.push({value: index, text: type.enum});
+            }
+          });
+          return array;
+        },
+
       },
       methods:{
         get_info(){
@@ -92,18 +112,33 @@
             callback: (response)=>{
               if(response.data.code===1){
                 this.merchantInfo=response.data.object;
+                this.select_type = this.get_enum_value(response.data.object.type);
               }
               else alert(response.data.msg);
             }
           });
         },
+        get_enum_value(typeEnum){
+          let value = 1;
+          for(let type of this.type_options){
+            if (typeEnum===type.text){
+              value=type.value;
+            }
+          }
+          return value;
+        },
         modify_info(){
+          this.merchantInfo.type=this.merchantType[this.select_type].enum;
           utils.axiosMethod({
             method: 'PUT',
             url: `/yummy/merchant/${this.merchant_id}/info`,
             data: this.merchantInfo,
             callback: (response)=>{
               alert(response.data.msg);
+              if(response.data.code===1){
+                this.get_info();
+                sessionStorage.setItem('vertification','BEFORE_APPROVAL');
+              }
             }
           });
         },

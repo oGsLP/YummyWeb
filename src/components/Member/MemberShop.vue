@@ -93,7 +93,7 @@
             <b-form-group>
               <div id="pay-modal-info-div">
                 <span id="pay-modal-member-discount">
-                <b>MemberLv : </b>{{'5'}}, <b>Discount : </b>{{mem_dis}}
+                <b>MemberLv : </b>{{mem_lv}}, <b>Discount : </b>{{mem_dis}}
               </span>
                 <span id="pay-modal-merchant-discount">
                 <b>MerchantDiscount : </b>{{mer_dis}}
@@ -174,6 +174,7 @@
           new_deal_id: null,
           check_payment: false,
           merchantDiscount: {},
+          mem_dis: 1,
         }
       },
       created(){
@@ -181,6 +182,8 @@
         this.get_current_packs();
         this.get_addresses();
         this.get_merchant_discount();
+        this.get_member_discount();
+        this.get_member_payment();
       },
       computed:{
         member_id(){
@@ -199,15 +202,14 @@
           });
           return array;
         },
-        mem_dis(){
-          /////  get..
-          return 0.8;
+        mem_lv(){
+          return sessionStorage.getItem('level');
         },
         mer_dis(){
           return this.merchantDiscount.min<=this.shopChart.sum?this.merchantDiscount.discount:0;
         },
         deal_total(){
-          return (this.shopChart.sum-this.mer_dis)*this.mem_dis;
+          return ((this.shopChart.sum-this.mer_dis)*this.mem_dis).toFixed(2);
         }
       },
       methods:{
@@ -309,6 +311,39 @@
               return type.name;
           }
         },
+        get_member_discount(){
+          utils.axiosMethod({
+            method: 'GET',
+            url: `/yummy/member/${this.member_id}/payment/discount`,
+            callback: response=>{
+              if(response.data.code===1)
+                this.mem_dis=response.data.object;
+            }
+          });
+        },
+        get_member_payment(){
+          utils.axiosMethod({
+            method: 'GET',
+            url: `/yummy/member/${this.member_id}/payment`,
+            callback: (response)=>{
+              if(response.data.code===1){
+                this.payment.account=response.data.object.account;
+              }
+              else alert(response.data.msg);
+            }
+          });
+        },
+        get_member_level(){
+          utils.axiosMethod({
+            method: 'GET',
+            url: `/yummy/member/${this.member_id}/payment/level`,
+            callback: (response)=>{
+              if(response.data.code===1){
+                sessionStorage.setItem('level',response.data.object);
+              }
+            }
+          });
+        },
         set_toggle_info(i){
             let pack = this.shopMenu.packs[i];
             this.toggle_info.name=pack.name;
@@ -354,20 +389,30 @@
           }
         },
         pay_later(){
-          this.submit_deal();
-          this.$router.push({name: 'memberDeal'});
-        },
-        submit_deal(){
-          utils.axiosMethod({
-            method: 'POST',
-            url: `/yummy/member/${this.member_id}/deals`,
-            params: {mer_id: '1'},
-            data: this.get_deal_object(),
-            callback: (response)=>{
-              alert(response.data.msg);
-              if(response.data.code===1)
-                this.new_deal_id = response.data.object.id;
-            }
+          new Promise(resolve => {
+            utils.axiosMethod({
+              method: 'POST',
+              url: `/yummy/member/${this.member_id}/merchants/${this.url_params['mer_id']}/distance`,
+              params:{time: this.limit_time},
+              data: this.addresses[this.addresses_select],
+              callback: response=>{
+                if(response.data.code===0)
+                  alert(response.data.msg);
+                else resolve();
+              }
+            });
+          }).then(()=>{
+            utils.axiosMethod({
+              method: 'POST',
+              url: `/yummy/member/${this.member_id}/deals`,
+              params: {mer_id: this.url_params['mer_id']},
+              data: this.get_deal_object(),
+              callback: (response)=>{
+                alert(response.data.msg);
+                if(response.data.code===1)
+                  this.$router.push({name: 'memberDeal'});
+              }
+            });
           });
         },
         pay_deal(){
@@ -412,6 +457,7 @@
               callback: response=>{
                 alert(response.data.msg);
                 this.$router.push({name: 'memberDeal'});
+                this.get_member_level();
               }
             });
           });
