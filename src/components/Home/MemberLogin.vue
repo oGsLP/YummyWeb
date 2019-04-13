@@ -91,7 +91,7 @@
           url:'/yummy/login/member/sendCode',
           data:{email: this.email},
           callback:(response)=>{
-            alert(response.data.msg+' '+response.data.object);
+            alert(response.data.msg);
             this.codeVertification=response.data.object;
             setTimeout(function () {
               this.countData.dismissCountDown = this.countData.dismissSecs;
